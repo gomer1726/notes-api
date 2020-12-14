@@ -1,0 +1,4 @@
+{
+  "jwtSecret": "6a8sd4f6a84ds",
+  "tokenLifetime": 1800
+}
