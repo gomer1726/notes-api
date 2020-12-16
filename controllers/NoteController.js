@@ -23,8 +23,7 @@ exports.UserNotes = async (req, res) => {
         });
         return res.status(200).json({totalCount: notes.count, notes: notes.rows});
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -44,8 +43,7 @@ exports.ShowPublic = async (req, res) => {
         if (!note) throw new Error("NOT_FOUND");
         else return res.status(200).json(note);
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -66,12 +64,11 @@ exports.Store = async (req, res) => {
         const note = await Note.create({
             userId: req.user.id,
             text: req.body.text,
-            isPublic: req.body.isPublic
+            isPublic: req.body.isPublic || false
         });
         return res.status(201).json(note);
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -95,8 +92,7 @@ exports.Update = async (req, res) => {
 
         let note = await Note.findByPk(id);
 
-        if (!note) throw new Error("NOT_FOUND");
-        if (note.userId !== req.user.id) throw new Error("FORBIDDEN");
+        if (!note || note.userId !== req.user.id) throw new Error("NOT_FOUND");
 
         await Note.update({
             userId: req.user.id,
@@ -108,8 +104,7 @@ exports.Update = async (req, res) => {
 
         return res.status(200).json(note);
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -131,8 +126,7 @@ exports.Destroy = async (req, res) => {
         await Note.destroy({where: {id}});
         return res.status(204).send();
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 

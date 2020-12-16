@@ -20,8 +20,7 @@ exports.GetLoggedInUser = async (req, res) => {
         });
         res.json(user);
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -36,7 +35,7 @@ exports.GetLoggedInUser = async (req, res) => {
 exports.Login = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(422).json({errors: errors.array()});
     }
 
     const {login, password} = req.body;
@@ -68,8 +67,7 @@ exports.Login = async (req, res) => {
             },
         );
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }
 
@@ -93,7 +91,6 @@ exports.TerminateSessions = async (req, res) => {
 
         return res.status(200).send();
     } catch (e) {
-        const error = helpers.handleErrors(e.message);
-        return res.status(error.code).json({message: error.message});
+        return helpers.handleErrors(res, e);
     }
 }

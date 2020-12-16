@@ -14,6 +14,12 @@ module.exports = {
       },
       userId: {
         type: Sequelize.BIGINT,
+        references: {
+          model: {
+            tableName: "users"
+          },
+          key: "id"
+        },
         allowNull: false,
       },
       isPublic: {

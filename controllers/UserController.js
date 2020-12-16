@@ -16,7 +16,7 @@ const helpers = require('../helpers/errorHandler');
 exports.Register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(422).json({errors: errors.array()});
     }
 
     const {login, password} = req.body;
@@ -54,8 +54,7 @@ exports.Register = async (req, res) => {
                 res.json({token});
             },
         );
-    } catch (err) {
-        const error = helpers.handleErrors(err.message);
-        return res.status(error.code).json({message: error.message});
+    } catch (e) {
+        return helpers.handleErrors(res, e);
     }
 };

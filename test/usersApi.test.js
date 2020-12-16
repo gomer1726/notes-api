@@ -24,4 +24,8 @@ describe('Testing users api', () => {
             });
     })
 
+    it('should not register without credentials', (done) => {
+        request(app).post('/api/users').expect(422, done);
+    })
+
 })

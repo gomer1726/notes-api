@@ -1,6 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
-const User = require('./index').User;
+const {check} = require('express-validator');
 
 module.exports = (sequelize, DataTypes) => {
   class Note extends Model {
@@ -22,6 +22,13 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Note'
   });
 
+  Note.rules = function(){
+    return [
+      check('text', 'Required field').not().isEmpty(),
+      check('text', 'Maximum 1000 characters').isLength({max: 1000}),
+      check('isPublic').optional()
+    ];
+  }
 
   return Note;
 };

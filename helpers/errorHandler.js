@@ -25,6 +25,7 @@ const ERRORS = {
     },
 };
 
-exports.handleErrors = (err = null) => {
-    return ERRORS[err || "SERVER_ERROR"];
+exports.handleErrors = (res = {}, err = null) => {
+    const error = ERRORS[err.message] || ERRORS["SERVER_ERROR"];
+    return res.status(error.code).json({message: error.message});
 }
